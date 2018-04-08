@@ -1,0 +1,24 @@
+{
+  "Mac" : [
+    {
+      "name" : "StatsDClient",
+      "hash" : "1c5fe5164951c30b61c0ea1ca8097dd890f4b982c640b5db2c76c0e8803d2c14"
+    }
+  ],
+  "watchOS" : [
+
+  ],
+  "tvOS" : [
+    {
+      "name" : "StatsDClient",
+      "hash" : "8cece173e0d41885aa184a56cf8dac22879ac1babf2f80ff02c76a3433a5e7c2"
+    }
+  ],
+  "commitish" : "4e7a35cdc9119699e0b44d97077b0eee57f49847",
+  "iOS" : [
+    {
+      "name" : "StatsDClient",
+      "hash" : "85d37c23c8d6d401aaac22086650f50382e1afd40c47741eb6d51520a9e2a531"
+    }
+  ]
+}

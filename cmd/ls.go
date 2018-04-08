@@ -1,41 +1,55 @@
-// Copyright © 2018 NAME HERE <EMAIL ADDRESS>
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
 package cmd
 
 import (
 	"io/ioutil"
 
+	"strings"
+
+	"path"
+
 	"fmt"
 
+	"github.com/khoiracle/dido/pkg"
 	"github.com/spf13/cobra"
 )
 
-const carthageFile = "./Cartfile.resolved"
+const carthageBuildPath = "./Carthage/Build/"
+const iOSPath = carthageBuildPath + "/iOS"
+const macOSPath = carthageBuildPath + "/Mac"
+const tvOSPath = carthageBuildPath + "/tvOS"
+const watchOSPath = carthageBuildPath + "/watchOS"
 
 // lsCmd represents the ls command
 var lsCmd = &cobra.Command{
 	Use:   "ls",
-	Short: "List all the assets in current folder",
+	Short: "List all built frameworks in /Carthage",
 	Run: func(cmd *cobra.Command, args []string) {
-		b, err := ioutil.ReadFile(carthageFile)
+		files, err := ioutil.ReadDir(carthageBuildPath)
 
 		if err != nil {
-			exit(fmt.Errorf("couldn't open %s", carthageFile))
+			exit(err)
 		}
 
-		fmt.Println(string(b))
+		var frameworks []*pkg.Framework
+
+		for _, f := range files {
+			if !strings.HasSuffix(f.Name(), pkg.VersionFileExtension) {
+				continue
+			}
+
+			versionFilePath := path.Join(carthageBuildPath, f.Name())
+			framework, err := pkg.NewFramework(versionFilePath)
+
+			if err != nil {
+				exit(err)
+			}
+
+			frameworks = append(frameworks, framework)
+		}
+
+		for _, v := range frameworks {
+			fmt.Println(v)
+		}
 	},
 }
 
