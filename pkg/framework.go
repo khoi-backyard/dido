@@ -9,7 +9,7 @@ import (
 
 	"path/filepath"
 
-	"github.com/pkg/errors"
+	"errors"
 )
 
 const VersionFileExtension = ".version"
