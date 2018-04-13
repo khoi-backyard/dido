@@ -7,14 +7,17 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// rootCmd represents the base command when called without any subcommands
+const carthageBuildPath = "./Carthage/Build/"
+const iOSPath = carthageBuildPath + "/iOS"
+const macOSPath = carthageBuildPath + "/Mac"
+const tvOSPath = carthageBuildPath + "/tvOS"
+const watchOSPath = carthageBuildPath + "/watchOS"
+
 var rootCmd = &cobra.Command{
 	Use:   "dido",
 	Short: "Carthage Caching",
 }
 
-// Execute adds all child commands to the root command and sets flags appropriately.
-// This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
 		exit(err)

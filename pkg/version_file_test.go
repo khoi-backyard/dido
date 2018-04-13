@@ -13,9 +13,9 @@ var frameworktests = []struct {
 	{"../testdata/.swift-statsd-client.version", "swift-statsd-client"},
 }
 
-func TestNewFramework(t *testing.T) {
+func TestNewVersionFile(t *testing.T) {
 	for _, c := range frameworktests {
-		f, err := NewFramework(c.path)
+		f, err := NewVersionFile(c.path)
 		if err != nil {
 			t.Errorf("fail to parse %s", c.path)
 		}
