@@ -1,4 +1,4 @@
-package pkg
+package carthage
 
 import (
 	"encoding/json"

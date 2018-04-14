@@ -1,19 +1,11 @@
 package cmd
 
 import (
-	"io/ioutil"
-
-	"strings"
-
-	"path"
-
 	"fmt"
-
+	"io"
 	"os"
 
-	"io"
-
-	"github.com/khoiracle/dido/pkg"
+	"github.com/khoiracle/dido/pkg/carthage"
 	"github.com/spf13/cobra"
 )
 
@@ -24,50 +16,39 @@ var lsCmd = &cobra.Command{
 	Use:   "ls",
 	Short: "List all frameworks specified in .version files",
 	Run: func(cmd *cobra.Command, args []string) {
-		if platform != "" && !pkg.IsValidPlatform(platform) {
+		if platform != "" && !carthage.IsValidPlatform(platform) {
 			exit(fmt.Errorf("%s is not a valid platform", platform))
 		}
 
-		files, err := ioutil.ReadDir(carthageBuildPath)
+		versionFiles, err := carthage.GetVersionFiles(carthageBuildPath)
 
 		if err != nil {
 			exit(err)
 		}
 
-		for _, f := range files {
-			if !strings.HasSuffix(f.Name(), pkg.VersionFileExtension) {
-				continue
+		for _, vf := range versionFiles {
+			fmt.Fprintf(os.Stdout, "📦  %s:\n", vf.RepoName)
+
+			if platform == "" || platform == carthage.PLATFORM_iOS {
+				outputHashes(os.Stdout, carthage.PLATFORM_iOS, vf.Hashes(carthage.PLATFORM_iOS))
 			}
 
-			versionFilePath := path.Join(carthageBuildPath, f.Name())
-			versionFile, err := pkg.NewVersionFile(versionFilePath)
-
-			if err != nil {
-				exit(err)
+			if platform == "" || platform == carthage.PLATFORM_watchOS {
+				outputHashes(os.Stdout, carthage.PLATFORM_watchOS, vf.Hashes(carthage.PLATFORM_watchOS))
 			}
 
-			fmt.Fprintf(os.Stdout, "📦 %s:\n", versionFile.RepoName)
-
-			if platform == "" || platform == pkg.PLATFORM_iOS {
-				outputHashes(os.Stdout, pkg.PLATFORM_iOS, versionFile.Hashes(pkg.PLATFORM_iOS))
+			if platform == "" || platform == carthage.PLATFORM_macOS {
+				outputHashes(os.Stdout, carthage.PLATFORM_macOS, vf.Hashes(carthage.PLATFORM_macOS))
 			}
 
-			if platform == "" || platform == pkg.PLATFORM_watchOS {
-				outputHashes(os.Stdout, pkg.PLATFORM_watchOS, versionFile.Hashes(pkg.PLATFORM_watchOS))
-			}
-
-			if platform == "" || platform == pkg.PLATFORM_macOS {
-				outputHashes(os.Stdout, pkg.PLATFORM_macOS, versionFile.Hashes(pkg.PLATFORM_macOS))
-			}
-
-			if platform == "" || platform == pkg.PLATFORM_tvOS {
-				outputHashes(os.Stdout, pkg.PLATFORM_tvOS, versionFile.Hashes(pkg.PLATFORM_tvOS))
+			if platform == "" || platform == carthage.PLATFORM_tvOS {
+				outputHashes(os.Stdout, carthage.PLATFORM_tvOS, vf.Hashes(carthage.PLATFORM_tvOS))
 			}
 		}
 	},
 }
 
-func outputHashes(w io.Writer, platform string, hashes []pkg.VersionHash) {
+func outputHashes(w io.Writer, platform string, hashes []carthage.VersionHash) {
 	if len(hashes) > 0 {
 		fmt.Fprintf(w, "%s\n", platform)
 	}

@@ -1,17 +1,29 @@
 package cmd
 
 import (
-	"fmt"
+	"os"
 
+	"github.com/khoiracle/dido/pkg"
 	"github.com/spf13/cobra"
 )
+
+const defaultCacheFolderPath = "~/Library/Caches/dido"
 
 // uploadCmd represents the upload command
 var uploadCmd = &cobra.Command{
 	Use:   "upload",
-	Short: "Upload your frameworks",
+	Short: "Store the frameworks",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("upload called")
+		fullPath, err := pkg.Expand(defaultCacheFolderPath)
+
+		if err != nil {
+			exit(err)
+		}
+
+		if err = os.MkdirAll(fullPath, os.ModePerm); err != nil {
+			exit(err)
+		}
+
 	},
 }
 

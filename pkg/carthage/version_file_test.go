@@ -1,4 +1,4 @@
-package pkg
+package carthage
 
 import (
 	"testing"
@@ -8,9 +8,9 @@ var frameworktests = []struct {
 	path     string
 	reponame string
 }{
-	{"../testdata/.Alamofire.version", "Alamofire"},
-	{"../testdata/.RxSwift.version", "RxSwift"},
-	{"../testdata/.swift-statsd-client.version", "swift-statsd-client"},
+	{"../../testdata/.Alamofire.version", "Alamofire"},
+	{"../../testdata/.RxSwift.version", "RxSwift"},
+	{"../../testdata/.swift-statsd-client.version", "swift-statsd-client"},
 }
 
 func TestNewVersionFile(t *testing.T) {
