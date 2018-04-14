@@ -1,4 +1,4 @@
-package pkg
+package homepath
 
 import (
 	"os/user"
