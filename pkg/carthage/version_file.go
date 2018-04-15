@@ -60,7 +60,7 @@ func NewVersionFile(path string) (*VersionFile, error) {
 }
 
 func (f *VersionFile) Hashes(platform string) []VersionHash {
-	switch strings.ToLower(platform) {
+	switch platform {
 	case PLATFORM_iOS:
 		return f.Version.IOS
 	case PLATFORM_macOS:

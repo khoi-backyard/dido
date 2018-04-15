@@ -1,15 +1,11 @@
 package cmd
 
 import (
-	"path"
-
-	"fmt"
-
-	"os"
-
-	"io/ioutil"
-
 	"encoding/json"
+	"fmt"
+	"io/ioutil"
+	"os"
+	"path"
 
 	"github.com/khoiracle/dido/pkg/carthage"
 	"github.com/khoiracle/dido/pkg/homepath"
