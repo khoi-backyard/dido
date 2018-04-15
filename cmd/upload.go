@@ -7,6 +7,10 @@ import (
 
 	"os"
 
+	"io/ioutil"
+
+	"encoding/json"
+
 	"github.com/khoiracle/dido/pkg/carthage"
 	"github.com/khoiracle/dido/pkg/homepath"
 	"github.com/mholt/archiver"
@@ -30,8 +34,24 @@ var uploadCmd = &cobra.Command{
 			repoSavePath := path.Join(defaultCacheFolderPath, vf.RepoName)
 			commitishSavePath := path.Join(repoSavePath, vf.Version.Commitish)
 
+			// Create the commitish folder
+			if err := os.MkdirAll(commitishSavePath, os.ModePerm); err != nil {
+				exit(err)
+			}
+
+			// Write out the .framework.version file
+			b, err := json.Marshal(vf.Version)
+			if err != nil {
+				exit(err)
+			}
+			if err := ioutil.WriteFile(path.Join(commitishSavePath, vf.Filename), b, 0644); err != nil {
+				exit(err)
+			}
+
+			// Zip the framework and dsym files and copy it to the cache folder
 			for _, v := range vf.Version.IOS {
 				fmt.Fprintf(os.Stdout, "💾  Saving %s\n", v.Name)
+
 				frameworkSavePath := path.Join(commitishSavePath, carthage.PLATFORM_iOS)
 				zipOutput := path.Join(frameworkSavePath, v.Name+".zip")
 

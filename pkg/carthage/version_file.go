@@ -15,6 +15,7 @@ const VersionFileExtension = ".version"
 var ErrInvalidFileName = errors.New("invalid filename format")
 
 type VersionFile struct {
+	Filename string
 	RepoName string
 	Version  *VersionFileContent
 }
@@ -52,6 +53,7 @@ func NewVersionFile(path string) (*VersionFile, error) {
 	}
 
 	return &VersionFile{
+		fileName,
 		fileName[1 : len(fileName)-len(filepath.Ext(fileName))],
 		&version,
 	}, nil
